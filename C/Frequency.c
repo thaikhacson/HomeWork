@@ -6,7 +6,7 @@
 typedef struct {
     char* ptr;
     uint8_t length;
-    uint8_t frequency;
+    uint8_t quantity;
     bool status;
 }Word;
 
@@ -21,7 +21,6 @@ int sizeStr(char str[]) {
 Word* splitString (char str[], uint8_t size, Word array[]) {
     uint8_t count = 0;
     uint8_t index = 0;
-    //Word* array = (Word*)malloc(size * sizeof(Word));
     array[index].ptr = str;
 
     while(*str != '\0') {
@@ -38,16 +37,43 @@ Word* splitString (char str[], uint8_t size, Word array[]) {
     }
 
     array[index].length = count;
-    array[index + 1].ptr = '\0';
+    array[index + 1].ptr = NULL;
     return array;
 }
 
 void print(Word array[], uint8_t size) {
     for(uint8_t i = 0; i < size; i++) {
-        for(uint8_t j = 0; j < array[i].length; j++) {
-            printf("%c", array[i].ptr[j]);
+        if(array[i].status == true) {
+            for(uint8_t j = 0; j < array[i].length; j++) {
+                printf("%c", array[i].ptr[j]);
+            }
+            printf("\t%d\n", array[i].quantity);
         }
-        printf(" ");
+    }
+}
+
+//Nam Hoang Bao Nam Hoang Yen Anh Son
+
+void findName(Word array[], uint8_t size){
+    for(uint8_t i = 0; i < size; i++) {
+        uint8_t count = 0;
+        for(uint8_t j = 0; j < size; j++) {
+            uint8_t index = 0;
+            while(array[i].ptr[index] == array[j].ptr[index]) {
+                index++;
+                if(array[i].length == array[j].length) {
+                    count++;
+                    if(count >= 2) {
+                        array[i].status = false;
+                        break;
+                    } else {
+                        array[i].status = true;
+                    }
+                    //break;
+                }
+            }
+        }
+        array[i].quantity = count;
     }
 }
 
@@ -57,6 +83,6 @@ int main () {
     uint8_t size = sizeStr(str);
     Word array[size];
     splitString (str, size, array);
+    findName(array, size);
     print(array, size);
-
 }
