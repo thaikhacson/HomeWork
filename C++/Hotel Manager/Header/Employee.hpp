@@ -1,3 +1,6 @@
+#ifndef _EMPLOYEE_H
+#define _EMPLOYEE_H
+
 #include <iostream>
 #include <vector>
 
@@ -10,20 +13,6 @@ typedef enum{
     LAUGGAGE_STAFF,
     GRADENER
 }JobPosition;
-
-class User{
-    private:
-        string username;
-        string password;
-    public:
-        User(string username, string password);
-        string getUsername() {
-            return this->username;
-        }
-        bool authenticate(string inputPassword) {
-            return inputPassword == password;
-        }
-};
 
 typedef struct{
     int day;
@@ -47,10 +36,15 @@ typedef struct {
     typeDate date;
 }Schedule;
 
-User::User(string username, string password) {
-    this->username = username;
-    this->password = password;
-}
+class User{
+    private:
+        string username;
+        string password;
+    public:
+        User(string username, string password);
+        string getUsername();
+        bool authenticate(string inputPassword);
+};
 
 class Employee{
     private:
@@ -62,14 +56,8 @@ class Employee{
         User user;
     public:
         Employee();
-        void getAuthenticate(string inputPassword) {
-            if(user.authenticate(inputPassword) || inputPassword == "admin") {
-                checkAuthenticate = true;
-            }
-        }
-        string getName() {
-            return this->name;
-        }
+        void getAuthenticate(string inputPassword);
+        string getName();
 };
 
 class EmployeeManager{
@@ -82,6 +70,4 @@ class EmployeeManager{
         void displayEmployee();
 };
 
-int main() {
-
-}
+#endif

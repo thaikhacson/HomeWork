@@ -1,53 +1,29 @@
-#include <iostream>
-#include <vector>
-
-using namespace std;
+#include "D:\Desktop\Embedded Interview\Home Work\HomeWork\C++\Hotel Manager\Header\Room.hpp"
 
 const int NUMBER_ROOM = 5;
 
-class Room{
-    private:
-        int roomNumber;
-        bool isBooked;
-        bool isCleaning;
-    public:
-        Room(int number) {
-            roomNumber = number;
-            isBooked = false;
-            isCleaning = true;
-        }
-        int getRoomNumber() {
-            return this->roomNumber;
-        }
-        bool isAvailble() {
-            return !isBooked && isCleaning;
-        }
-        void bookRoom() {
-            isBooked = true;
-        }
-        void checkIn() {
-            isCleaning = false;
-            isBooked = true;
-        }
-        void checkOut() {
-            isCleaning = true;
-            isBooked = false;
-        }
-};
-
-vector<Room> databaseRoom;
-
-class HotelManager {
-    // private:
-    //     vector<Room> databaseRoom;
-    public:
-        //vector<Room> databaseRoom;
-        void displayAvailbleRooms();
-        void bookRoom(int roomNumber);
-        void checkIn(int roomNumber);
-        void checkOut(int roomNumber);
-        void updateRoom();
-};
+Room::Room(int number) {
+    roomNumber = number;
+    isBooked = false;
+    isCleaning = true;
+}
+int Room::getRoomNumber() {
+    return this->roomNumber;
+}
+bool Room::isAvailble() {
+    return !isBooked && isCleaning;
+}
+void Room::bookRoom() {
+    isBooked = true;
+}
+void Room::checkIn() {
+    isCleaning = false;
+    isBooked = true;
+}
+void Room::checkOut() {
+    isCleaning = true;
+    isBooked = false;
+}
 
 void HotelManager::displayAvailbleRooms() {
     cout << "Room\t" << "Status" << endl;
@@ -101,17 +77,4 @@ void HotelManager::updateRoom() {
         databaseRoom.push_back(room);
         ID++;
     }
-}
-
-int main() {
-    HotelManager hotel;
-    
-    hotel.updateRoom();
-    hotel.displayAvailbleRooms();
-    cout << "\n";
-    hotel.bookRoom(102);
-    hotel.checkIn(102);
-    cout << "\n";
-    hotel.displayAvailbleRooms();
-    return 0;
 }
