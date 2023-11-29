@@ -56,7 +56,7 @@ void CustomerManager::addCustomer(Customer customer) {
         cin >> s_iRoom;
 
         //Check is the room is occupied
-        for(auto it : databaseCustomer) {
+        for(auto& it : databaseCustomer) {
             if(it.getIDroom() == s_iRoom) {
                 cout << "Reservation failed. The room is occupied!" << endl;
                 break;
@@ -88,7 +88,7 @@ void CustomerManager::editCustomer(int s_iRoom) {
         cin >> s_iRoom;
 
         //Check is room
-        for (auto it : databaseCustomer) {
+        for (auto& it : databaseCustomer) {
             if(it.getIDroom() == s_iRoom) {
                 cout << "1. Change to another room" << endl;
                 cout << "2. Change name" << endl;
@@ -137,10 +137,15 @@ void CustomerManager::editCustomer(int s_iRoom) {
     } while(s_iInput == 1);
 }
 
-void CustomerManager::deleteCustomer(Customer customer) {
+void CustomerManager::deleteCustomer(int s_iRoom) {
     for(auto& it : databaseCustomer) {
-        if(it.getName() == customer.getName()) {
-            databaseCustomer.erase(databaseCustomer.begin());
+        if(it.getIDroom() == s_iRoom) {
+            cout << "Delete Customer room: ";
+            cin >> s_iRoom;
+            it.setName("");
+            it.setPhone("");
+            it.setAddress("");
+            cout << "Delete Customer successful";
         }
     }
 }

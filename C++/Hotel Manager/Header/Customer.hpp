@@ -58,7 +58,7 @@ class CustomerManager{
     public:
         void addCustomer(Customer customer);
         void editCustomer(int s_iRoom);
-        void deleteCustomer(Customer customer);
+        void deleteCustomer(int s_iRoom);
         void displayCustomerInfo();
 };
 #endif
