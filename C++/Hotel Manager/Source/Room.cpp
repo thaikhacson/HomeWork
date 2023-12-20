@@ -70,6 +70,7 @@ void HotelManager::checkOut(int roomNumber) {
     }    
 }
 
+//Create ID Room - 5 ROOM
 void HotelManager::updateRoom() {
     int ID = 101;
     for(int i = 0; i < NUMBER_ROOM; i++) {

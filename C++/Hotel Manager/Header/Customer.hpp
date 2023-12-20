@@ -35,7 +35,7 @@ class Customer{
         string name;
         string phoneNumber;
         string address;
-        vector<bookingHistory> bookingHistorys;
+        vector<bookingHistory> databaseHistory;
     public:
         Customer(string customerName, string customrePhone, string customerAddress);
         int getIDroom();
@@ -48,7 +48,7 @@ class Customer{
         void setAddress(string address);
         void addBookingHistory(bookingHistory bookingDetails);
         void displayBookingHistory();
-};
+};  
 
 vector<Customer> databaseCustomer;
 
@@ -56,7 +56,7 @@ class CustomerManager{
     // private:
     //     vector<Customer> databaseCustomer;
     public:
-        void addCustomer(Customer customer);
+        void addCustomer();
         void editCustomer(int s_iRoom);
         void deleteCustomer(int s_iRoom);
         void displayCustomerInfo();

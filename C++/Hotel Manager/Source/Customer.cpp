@@ -1,5 +1,4 @@
-#include "D:\Desktop\Embedded Interview\Home Work\HomeWork\C++\Hotel Manager\Header\Customer.hpp"
-
+#include "..\Header\Customer.hpp"
 
 Customer::Customer(string customerName, string customrePhone, string customerAddress) {
     this->name = customerName;
@@ -40,14 +39,22 @@ void Customer::setAddress(string add) {
 }
 
 void Customer::addBookingHistory(bookingHistory bookingDetails) {
-
+    databaseHistory.push_back(bookingDetails);
 }
 
 void Customer::displayBookingHistory() {
-
+    cout << "Name\t\tRoom\t\tDate\t\tTime\t\tStatus" << endl;
+    for(auto& it : databaseCustomer) {
+        cout << it.getName() << "\t\t" << it.getIDroom() << "\t\t";
+        for(auto& it : databaseHistory) {
+        cout << it.date.day << "/" << it.date.month << "/" << it.date.year << "/t/t";
+        cout << it.time.hour << "/" << it.time.minute << "/t" << it.time.second << "/t/t";
+        cout << ((it.status == IN) ? "Check in" : "Check out") << endl; 
+    }
+    }
 }
 
-void CustomerManager::addCustomer(Customer customer) {
+void CustomerManager::addCustomer() {
     int s_iInput;
     do {
         int s_iRoom;
@@ -138,16 +145,23 @@ void CustomerManager::editCustomer(int s_iRoom) {
 }
 
 void CustomerManager::deleteCustomer(int s_iRoom) {
-    for(auto& it : databaseCustomer) {
-        if(it.getIDroom() == s_iRoom) {
-            cout << "Delete Customer room: ";
-            cin >> s_iRoom;
-            it.setName("");
-            it.setPhone("");
-            it.setAddress("");
-            cout << "Delete Customer successful";
+    int s_iInput;
+    do {
+        cout << "Enter Room Number: ";
+        cin >> s_iRoom;
+
+        for(int i = 0; i < databaseCustomer.size(); i++) {
+            if(databaseCustomer[i].getIDroom() == s_iRoom) {
+                databaseCustomer.erase(databaseCustomer.begin()+i);
+                cout<<"Delete customer successfully"<<endl;
+                return; 
+            }   
         }
-    }
+        cout << "1. Delete again" << endl;
+        cout << "2. Exit" << endl;
+        cout << "Your choose: ";
+        cin >> s_iInput;
+    } while(s_iInput == 1);
 }
 
 void CustomerManager::displayCustomerInfo() {
@@ -155,4 +169,12 @@ void CustomerManager::displayCustomerInfo() {
     for (auto it : databaseCustomer) {
         cout << it.getName() << "\t\t" << it.getPhone() << "\t\t" << it.getAddress() << endl;
     }
+}
+//---------------(test)----------------
+int main() {
+    CustomerManager mc1;
+    mc1.addCustomer();
+    mc1.displayCustomerInfo();
+
+    return 0;
 }
