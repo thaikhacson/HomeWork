@@ -2,6 +2,10 @@
 #include <setjmp.h>
 #include <string.h>
 
+#define MAX_ERRORS 100
+#define TRY if (setjmp(buf) == 0)
+#define CATCH(x) else if (current_error >= 0 && exceptions[current_error].code == (x))
+
 jmp_buf buf;
 
 // Cấu trúc lưu trữ thông tin lỗi
@@ -10,12 +14,8 @@ struct Exception {
     char message[100];
 };
 
-#define MAX_ERRORS 100
 struct Exception exceptions[MAX_ERRORS];
 int current_error = -1;
-
-#define TRY if (setjmp(buf) == 0)
-#define CATCH(x) else if (current_error >= 0 && exceptions[current_error].code == (x))
 
 // Hàm THROW cải tiến để nhận thông điệp lỗi và mã lỗi
 void THROW(int code, const char *message) {
@@ -31,12 +31,12 @@ void THROW(int code, const char *message) {
 }
 
 // Hàm thử nghiệm mới ném ra một loại lỗi khác nhau
-void testFunction1() {
-    THROW(2, "Error in testFunction1");
+void test1() {
+    THROW(2, "Error 1");
 }
 
-void testFunction2() {
-    THROW(3, "Error in testFunction2");
+void test2() {
+    THROW(3, "Error 2");
 }
 
 double divide(int a, int b) {
@@ -60,13 +60,13 @@ int main() {
 
     // Thử nghiệm các hàm thử nghiệm mới
     TRY {
-        testFunction1();
+        test1();
     } CATCH(2) {
         printf("Error 2: %s\n", exceptions[current_error].message);
     }
 
     TRY {
-        testFunction2();
+        test2();
     } CATCH(3) {
         printf("Error 3: %s\n", exceptions[current_error].message);
     }
