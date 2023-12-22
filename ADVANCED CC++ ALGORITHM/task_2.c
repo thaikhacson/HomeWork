@@ -8,6 +8,13 @@
 
 jmp_buf buf;
 
+typedef enum {
+    NO_ERROR, 
+    FILE_ERROR, 
+    NETWORK_ERROR, 
+    CALCULATION_ERROR 
+}ErrorCodes;
+
 // Cấu trúc lưu trữ thông tin lỗi
 struct Exception {
     int code;
@@ -30,46 +37,33 @@ void THROW(int code, const char *message) {
     }
 }
 
-// Hàm thử nghiệm mới ném ra một loại lỗi khác nhau
-void test1() {
-    THROW(2, "Error test1");
+void readFile() {
+    printf("Read File..\n");
+    THROW(FILE_ERROR, "Error reading file: File does not exist!");
 }
 
-void test2() {
-    THROW(3, "Error test2");
+void networkOperation() {
+    printf("Network Operation..\n");
+    THROW(NETWORK_ERROR, "Network connection error: Unable to connect to the server!");
 }
 
-double divide(int a, int b) {
-    if (b == 0) {
-        THROW(1, "Divide by 0 error");
-    }
-    return (double) a / b;
+void calculateData() {
+   printf("Calculate Data..\n");
+   THROW(CALCULATION_ERROR, "Calculation error: Invalid input data!");
 }
 
 int main() {
-    int a = 10;
-    int b = 0;
-    double result = 0.0;
-
+    
     TRY {
-        result = divide(a, b);
-        printf("Result: %f\n", result);
-    } CATCH(1) {
+        readFile();
+        networkOperation();
+        calculateData();
+    } CATCH(FILE_ERROR) {
         printf("Error 1: %s\n", exceptions[current_error].message);
+    } CATCH(NETWORK_ERROR) {
+        printf("Network Error: %s\n", exceptions[current_error].message);
+    } CATCH(CALCULATION_ERROR) {
+        printf("Calculation Error: %s\n", exceptions[current_error].message);
     }
-
-    // Thử nghiệm các hàm thử nghiệm mới
-    TRY {
-        test1();
-    } CATCH(2) {
-        printf("Error 2: %s\n", exceptions[current_error].message);
-    }
-
-    TRY {
-        test2();
-    } CATCH(3) {
-        printf("Error 3: %s\n", exceptions[current_error].message);
-    }
-
-    return 0;
+    printf("Program completed successfully\n");
 }

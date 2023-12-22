@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": ".",
-      "program": "build/Debug/outDebug",
+      "cwd": "d:/Desktop/Embedded Interview/Home Work/HomeWork/ADVANCED CC++ ALGORITHM",
+      "program": "d:/Desktop/Embedded Interview/Home Work/HomeWork/ADVANCED CC++ ALGORITHM/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
