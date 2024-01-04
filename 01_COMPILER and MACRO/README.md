@@ -61,3 +61,288 @@ Nếu là máy tính chạy hệ điều hành windows thì file thực thi thư
 Nếu là máy tính chạy hệ điều hành linux thì file thực thi thường có đuôi là .out (hoặc không đuôi, tùy thuộc vào cách lưu của người dùng) được lưu trên ổ cứng. Khi nào có lệnh chạy chương trình thì mã chương trình được tải lên RAM chạy tương tự như windows.
 
 Nếu là các vi điều khiển, chúng cần một chương trình của nhà sản xuất vi điều khiển để tải (load/flash/program) chương trình vào vi điều khiển.
+
+**II. MACRO**
+
+**1.**  Khi ta sử dụng chỉ thị **#include**, nội dung chứa trong header file sẽ được sao chép vào file hiện tại.
+
+- Khi include sử dụng dấu ngoặc nhọn < > thì preprocessor sẽ được dẫn tới Include Directory của Compiler.
+
+`#include <file>`
+
+- Còn khi sử dụng dấu ngoặc kép thì preprocessor sẽ tìm kiếm file trong thư mục cùng chứa với file chương trình của bạn
+
+`#include "file"
+`
+
+**2.**  Một Macro có thể coi là một loại viết tắt. Trước khi sử dụng một macro, bạn phải định nghĩa nó rõ ràng bằng chỉ thị **#define**, cấu trúc như ví dụ sau:
+
+`#define BUFFER_SIZE 1020`
+
+Ví dụ trên sẽ định nghĩa macro có tên ‘BUFFER_SIZE’ là viết tắt của ‘1020’.
+
+Nếu sau lệnh #define này có xuất hiện macro ‘BUFFER_SIZE’ thì bộ Preprocessor thay thế bằng ‘1020’.
+```
+#include <stdio.h>
+#define BUFFER_SIZE 1020
+
+int main() {
+    printf("buffer size is %d", BUFFER_SIZE );
+    return 0;
+}
+```
+`Output: buffer size is 1020`
+
+**3.** Macro có thể là hàm chứa các tham số, các tham số này sẽ không được kiểm tra kiểu dữ liệu.
+
+Ví dụ, macro INCREMENT(x) ở dưới, x có thể là bất cứ kiểu dữ liệu nào.
+
+```
+#include <stdio.h>
+#define INCREMENT(x) ++x
+
+int main() {
+    char *ptr = "Hello";
+    int x = 99;
+    printf("%s\n", INCREMENT(ptr));
+    printf("%d\n", INCREMENT(x));
+    return 0;
+}
+```
+```
+Output:
+ello
+100
+```
+**4.** Preprocessor chỉ thực hiện thay thế các macro chứ không thực hiện các phép tính toán.
+
+Ta có ví dụ như sau:
+
+```
+#include <stdio.h>
+#define CALC(X,Y) (X*Y)
+
+int main() {
+    printf("%d\n",CALC(1+2, 3+4));
+    return 0;
+}
+```
+
+```
+Output:
+11
+```
+Có thể thấy kết quả mong muốn là 21, tuy nhiên lại bằng 11.
+
+Bởi vì các tham số sẽ được tính toán sau khi được thay thế nên macro CALC(1+2,3+4) sẽ trở thành (1+2*3+4) = (1+6+4) =(11).
+
+Vậy để kết quả được tính đúng thì ta phải sửa lại như sau:
+
+```
+#include <stdio.h>
+// instead of writing X*Y, we write (X)*(Y)
+#define CALC(X,Y) (X)*(Y)
+
+int main() {
+    printf("%d\n",CALC(1+2, 3+4));
+    return 0;
+}
+```
+
+```
+Output:
+21
+```
+**5.** Các tokens được truyền cho các macro có thể được nối bằng cách sử dụng toán tử ## (còn được gọi là toán tử Token-Pasting)
+
+```
+#include <stdio.h>
+#define merge(X,Y) X##Y
+
+int main() {
+    printf("%d\n",merge(12, 34));
+    return 0;
+}
+```
+
+```
+Output:
+1234
+```
+**6.** Một token được truyền cho macro có thể được chuyển thành một chuỗi kí tự bằng cách sử dụng dấu # trước nó
+
+```
+#include <stdio.h>
+#define convert(a) #a
+
+int main() {
+    printf("%s",convert(Hello));
+    return 0;
+}
+```
+
+```
+Output:
+Hello
+```
+**7.** Các macro có thể được viết trong nhiều dòng bằng cách sử dụng dấu ‘\’.
+
+Dòng cuối cùng không cần có dấu ‘\’
+
+```
+#include <stdio.h>
+
+#define PRINT(i, limit) while (i < limit) { \
+                            printf("Hello"); \
+                            i++;             \
+                         }
+
+int main() {
+    int i = 0; 
+    PRINT(i, 3); 
+    return 0;
+}
+```
+
+```
+Output:
+HelloHelloHello
+```
+**8.** Nên hạn chế sử dụng các macro có các tham số vì chúng thỉnh thoảng có thể gây một số lỗi không mong muốn. Và inline function có thể sử dụng để thay thế.
+
+Chúng ta theo dõi ví dụ dưới đây
+
+```
+#include <stdio.h>
+#define square(x) x*x
+
+int main() {
+    //Expanded as 36/6*6
+    int x=36 / square(6);
+    printf("%d",x);
+    return 0;
+}
+```
+
+```
+Output:
+36
+```
+Có thể thấy kết quả trả về đáng lẽ sẽ là bằng 1 nhưng nó lại bằng 36.
+
+Nếu chúng ta sử dụng inline function, chúng ta sẽ được kết quả đúng như mong muốn
+
+```
+#include <stdio.h>
+static inline int square(int x) { return x*x; }
+
+int main() {
+    int x= 36/ square(6);
+    printf("%d",x);
+    return 0;
+}
+```
+
+```
+Output:
+1
+```
+**9.** Bộ Preprocessor có hỗ trợ các chỉ thị if-else nhằm sử dụng các macro làm các điều kiện thực thi lệnh
+
+```
+#include <stdio.h>
+#define NUMBER 3
+
+int main() {
+#if NUMBER >= 2
+    printf("Hello World!!!");
+#else
+    printf(“No define”);
+#endif
+}
+```
+
+```
+Output:
+Hello World!!!
+```
+**10.** Một header file có thể được thêm vào nhiều hơn 1 lần, điều này sẽ dẫn đến khai báo lại nhiều biến, hàm giống nhau và xuất hiện lỗi khi biên dịch. Để tránh vấn đề này, nên sử dụng #defined, #ifdef và #ifndef
+
+```
+#include <stdio.h>
+#ifndef MATH_H
+#define MATH_H
+#include <math.h>
+
+int main() {
+    int a = 9;
+    printf("%f", sqrt(a));
+}
+#endif
+```
+```
+
+Output:
+3.000000
+```
+**11.** Có một số macro được định nghĩa từ trước và có thể sử dụng làm một số mục đích riêng như:
+
+•	Để in ra đường dẫn file  thì sử dụng macro (__FILE__)
+•	Ngày tháng năm lúc biên dịch chương trình sử dụng macro (__DATE__)
+•	Thời gian lúc biên dịch chương trình sử dụng macro (__TIME__)
+•	Dòng chương trình thư bao nhiêu sử dụng macro (__LINE__).
+
+```
+#include <stdio.h>
+
+int main() {
+    printf("Current File :%s\n", __FILE__ );
+    printf("Current Date :%s\n", __DATE__ );
+    printf("Current Time :%s\n", __TIME__ );
+    printf("Line number :%d\n", __LINE__ );
+    return 0;
+}
+```
+```
+Output
+Current File : C:\Users\DUCTHANG\Desktop\macro.c
+Current Date : Mar 29 2029
+Current Time : 08:31:07
+Line number : 7
+```
+**12.** Chúng ta có thể bỏ định nghĩa các macro đã định nghĩa trước đó bằng cách sử dụng #undef
+
+```
+#include <stdio.h>
+#define NUMBER 212
+
+int main() {
+    printf("%d", NUMBER);
+#undef NUMBER
+    printf("%d", NUMBER);
+    return 0;
+}
+```
+
+Chương trinh này sẽ có lỗi tại dòng thứ 7 vì NUMBER chưa được định nghĩa. Ta sẽ chỉnh lại như sau:
+
+```
+#include <stdio.h>
+#define NUMBER 212
+
+int main() {
+    printf("%d\n", NUMBER);
+#undef NUMBER
+    int NUMBER = 100;
+    printf("%d", NUMBER);
+    return 0;
+}
+```
+
+```
+Output
+212 
+100
+```
+
+
