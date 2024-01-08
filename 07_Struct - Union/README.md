@@ -30,7 +30,9 @@ Chúng ta đều biết rằng các CPU hiện đại của chúng ta luôn thao
 •	Lúc nãy ở trên chúng ta có biết được rằng CPU chỉ thao tác trên memory theo từng khối ở địa chỉ chẵn. Hay nói chính xác hơn khối ở đây là 1 WORD size. Tùy thuộc vào kiến trúc của CPU, nhưng thông dụng nhất có các size như sau:
 
 o	Trên system 16bit: 1 WORD = 16bit = 2 bytes
+
 o	Trên system 32bit: 1 WORD = 32bit = 4 bytes
+
 o	Trên system 64bit: 1 WORD = 64bit = 8 bytes
 
 •	N-byte alignment: chúng ta có các loại n-byte alignment: 2-byte align, 4-byte align, 8-byte align.
