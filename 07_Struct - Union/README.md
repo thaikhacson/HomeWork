@@ -37,7 +37,7 @@ o	Trên system 64bit: 1 WORD = 64bit = 8 bytes
 
 **_1.3.	Cách tính kích thước bộ nhớ_**
 
--	Theo mình nghĩ, số byte mỗi lần đọc nó sẽ lấy kích thước của kiểu dữ liệu lớn nhất trong Struct (đã kiểm tra nhưng mâu thuẫn so với ở phía trên, vì tùy hệ thống mỗi lần đọc là 1 WORD và kích thước của 1 WORD khác nhau tùy vào system 16 bit, 32 bit hay 64 bit
+-	Align theo kiểu dữ liệu có kích thước lớn nhất. Tức là một cách để sắp xếp các thành viên trong một struct sao cho địa chỉ của chúng bắt đầu từ một số nguyên chia hết cho kích thước của kiểu dữ liệu có kích thước lớn nhất trong struct đó. Điều này giúp cho CPU có thể truy cập vào các thành viên của struct một cách hiệu quả hơn.
 -	Kiểu dữ liệu chỉ có thể đặt ở ô nhớ có vị trí chia hết cho chính nó
 -	Ví dụ kiểu int (4 byte) thì đặt tại địa chỉ chia hết cho 4 là: 4, 8, 12,...
 -	Còn kiểu char (1 byte) thì đặt ở bất kì ô nhớ nào, thường sẽ đặt liền kề với địa chỉ của biến trước đó
