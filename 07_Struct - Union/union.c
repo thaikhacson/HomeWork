@@ -19,14 +19,21 @@ union test2
 
 union test3
 {
-    int i1;     
-    int i2;     
-    char c;     
-    short s;    
+    char *ptr;
+    int id;
+    char name[7];    
+};
+
+union test4
+{
+    char *ptr;
+    int id;
+    char name[9];    
 };
 
 int main() {
     printf("Size of test 1: %d byte\n", sizeof(union test1));
     printf("Size of test 2: %d byte\n", sizeof(union test2));
     printf("Size of test 3: %d byte\n", sizeof(union test3));
+    printf("Size of test 4: %d byte\n", sizeof(union test4));
 }

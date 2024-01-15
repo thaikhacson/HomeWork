@@ -33,7 +33,7 @@ struct test3
 
 struct test4
 {
-    char *p;            //8 byte
+    long double *p;            //8 byte
     // int i;
     // char c[2];
 };
@@ -44,4 +44,5 @@ int main() {
     printf("Size of test 2: %d byte\n", sizeof(struct test2));
     printf("Size of test 3: %d byte\n", sizeof(struct test3));
     printf("Size of test 4: %d byte\n", sizeof(struct test4));
+    printf("Size of test 4: %d byte\n", sizeof(long double));
 }
